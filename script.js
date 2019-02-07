@@ -1,6 +1,5 @@
 let search = document.querySelector('#input');
 let movieList = document.querySelector('#movies');
-let searchString;
 
 search.addEventListener('keyup', () => {
     if (movieList.children.length > 0) {
@@ -8,7 +7,7 @@ search.addEventListener('keyup', () => {
             movieList.removeChild(movieList.firstChild);
         }
     }
-    searchString = search.value;
+    let searchString = search.value;
     getData(`http://www.omdbapi.com/?apikey=ebd44eee&s=${searchString}&type=movie`)
     .then(movies => {
         if (movies != void 0) {
@@ -18,22 +17,56 @@ search.addEventListener('keyup', () => {
     .catch(error => console.error(error));
 });
 
+function randomInteger(min, max) {
+    return Math.floor(min + Math.random() * (max + 1 - min));
+}
 
+function imdb() {
+    let int = '';
+    let searchImdb = 'tt';
+    while(searchImdb.length < 9) {
+        //int = randomInteger(0,9);
+        searchImdb =  searchImdb + randomInteger(0,9);
+    }
+    return searchImdb;
+}
 
-function addMovieToList(movie) {
+getData(`http://www.omdbapi.com/?i=${imdb()}&apikey=ebd44eee&plot=full`)
+.then(movies => console.log(movies));
+ /*{
+    if (Number(movies.Metascore) < 60) {
+        link.remove();
+    } else {
+    console.log(movies.Metascore);
+    let movieInfo = movies;
+    div.textContent = movieInfo.Title;
+    }
+}); */
+
+function addMovieToList(movie,test) {
     //console.log(movie);
     if (movie.Poster !== 'N/A') {
     let img = document.createElement('img');
+    let div = document.createElement('div');
+    let link = document.createElement('a');
     img.src = movie.Poster;
     img.classList.add('img-movies');
-    let link = document.createElement('a');
     link.setAttribute('href', `https://www.imdb.com/title/${movie.imdbID}/`);
     link.setAttribute('target', '_blank');
     movieList.appendChild(link);
     link.appendChild(img);
-    console.log(movie.imdbID);
+    link.appendChild(div);
+    getData(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=ebd44eee&plot=full`)
+    .then(movies => {
+        if (Number(movies.Metascore) < 60) {
+            link.remove();
+        } else {
+        console.log(movies.Metascore);
+        let movieInfo = movies;
+        div.textContent = movieInfo.Title;
+        }
+    }); 
     }
-
 }
 
 function getData(url) {
@@ -42,12 +75,19 @@ function getData(url) {
         xhr.open('GET', url);
         xhr.onload = function() {
             if (xhr.status === 200) {
-                /*
-                let json = xhr.response;
+                console.log(JSON.parse(xhr.response).Response === 'False');
+                
+                //console.log(typeof xhr.response);
+                if (url.search(/&i/gi) !== -1 || url.search(/\?i/gi) !== -1) {
+                    let json = JSON.parse(xhr.response);
+                //console.log(json);
                 resolve(json);
-                */         
+                } else {
+                
                 let json = JSON.parse(xhr.response);
+                
                 resolve(json.Search);
+                }
             } else {
                 reject(xhr.statusText);
             }
@@ -62,5 +102,4 @@ function getData(url) {
 }   
 
 
-getData(`http://www.omdbapi.com/?i=tt1305044&apikey=ebd44eee`)
-.then(movies => console.log(movies));
+
