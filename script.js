@@ -16,7 +16,7 @@ search.addEventListener('keyup', () => {
     })
     .catch(error => console.error(error));
 });
-
+/*
 function randomInteger(min, max) {
     return Math.floor(min + Math.random() * (max + 1 - min));
 }
@@ -30,18 +30,19 @@ function imdb() {
     }
     return searchImdb;
 }
-
-getData(`http://www.omdbapi.com/?i=${imdb()}&apikey=ebd44eee&plot=full`)
-.then(movies => console.log(movies));
- /*{
-    if (Number(movies.Metascore) < 60) {
-        link.remove();
-    } else {
-    console.log(movies.Metascore);
-    let movieInfo = movies;
-    div.textContent = movieInfo.Title;
-    }
-}); */
+function randomMovie(numbers) {
+    let ratings = 0;
+while (ratings < 60) {
+    ratings += 5;
+    console.log(ratings); 
+    getData(`http://www.omdbapi.com/?i=${imdb()}&apikey=ebd44eee&plot=full&type=movie`)
+    .then(movies => {console.log(movies.Metascore)
+        ratings = Number(movies.Metascore);
+        let test = true;
+        console.log(test);
+    })
+    .catch(error => console.error(error));
+}*/
 
 function addMovieToList(movie,test) {
     //console.log(movie);
@@ -57,14 +58,14 @@ function addMovieToList(movie,test) {
     link.appendChild(img);
     link.appendChild(div);
     getData(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=ebd44eee&plot=full`)
-    .then(movies => {
+    .then(movies => {/*
         if (Number(movies.Metascore) < 60) {
             link.remove();
         } else {
-        console.log(movies.Metascore);
+        console.log(movies.Metascore);*/
         let movieInfo = movies;
         div.textContent = movieInfo.Title;
-        }
+        //}
     }); 
     }
 }
@@ -74,8 +75,8 @@ function getData(url) {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url);
         xhr.onload = function() {
-            if (xhr.status === 200) {
-                console.log(JSON.parse(xhr.response).Response === 'False');
+            if (xhr.status === 200 && JSON.parse(xhr.response).Response !== 'False') {
+                //console.log(333);
                 
                 //console.log(typeof xhr.response);
                 if (url.search(/&i/gi) !== -1 || url.search(/\?i/gi) !== -1) {
@@ -89,7 +90,7 @@ function getData(url) {
                 resolve(json.Search);
                 }
             } else {
-                reject(xhr.statusText);
+                //reject(xhr.statusText);
             }
         };
 
