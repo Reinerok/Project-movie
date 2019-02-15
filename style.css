@@ -14,3 +14,10 @@
 #movies a {
     margin: 15px auto;
 }
+
+span {
+    text-align: center;
+    display: block;
+    position: relative;
+    font-size: 23px;
+}

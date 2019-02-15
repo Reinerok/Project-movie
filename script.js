@@ -44,7 +44,7 @@ while (ratings < 60) {
     .catch(error => console.error(error));
 }*/
 
-function addMovieToList(movie,test) {
+function addMovieToList(movie) {
     //console.log(movie);
     if (movie.Poster !== 'N/A') {
     let img = document.createElement('img');
