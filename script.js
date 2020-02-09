@@ -8,7 +8,7 @@ search.addEventListener('keyup', () => {
         }
     }
     let searchString = search.value;
-    getData(`http://www.omdbapi.com/?apikey=ebd44eee&s=${searchString}&type=movie`)
+    getData(`https://www.omdbapi.com/?apikey=ebd44eee&s=${searchString}&type=movie`)
     .then(movies => {
         if (movies != void 0) {
             movies.forEach(movie => addMovieToList(movie));
@@ -35,7 +35,7 @@ function randomMovie(numbers) {
 while (ratings < 60) {
     ratings += 5;
     console.log(ratings); 
-    getData(`http://www.omdbapi.com/?i=${imdb()}&apikey=ebd44eee&plot=full&type=movie`)
+    getData(`https://www.omdbapi.com/?i=${imdb()}&apikey=ebd44eee&plot=full&type=movie`)
     .then(movies => {console.log(movies.Metascore)
         ratings = Number(movies.Metascore);
         let test = true;
@@ -57,7 +57,7 @@ function addMovieToList(movie) {
     movieList.appendChild(link);
     link.appendChild(img);
     link.appendChild(div);
-    getData(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=ebd44eee&plot=full`)
+    getData(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=ebd44eee&plot=full`)
     .then(movies => {/*
         if (Number(movies.Metascore) < 60) {
             link.remove();
